@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Main Page </title>
+
+<!-- Annotorious Library import  -->
+<link type="text/css" rel="stylesheet" href="css/annotorious.css" />
+<script type="text/javascript" src="js/annotorious.min.js"></script>
+
+<!-- plugin -->
+<script type="text/javascript" src="js/polygon_selector.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+
+<body onload="init();">
+Test Page
+<p>
+<p>
+<form action="/php/fileUpload.php" method="post" enctype="multipart/form-data">	
+	<p> for input file <p>
+	<input type="file" name="uploadFile" id="uploadFile">
+	<input type="submit" value="file submit" name="submit">
+</form>
+
+<p>-----------------------------------------------------------------</p>
+<p> Test Annotation </p>
+
+<img id="testimage" src="Images/example_folder/img1.jpg" class="annotatable" 
+     width="200" height="200">
+
+<p>-----------------------------------------------------------------</p>
+
+<button type="button" onclick="testAnno();"> TestButton </button>
+</body>
+
+<script>
+	function init(){
+		anno.makeAnnotatable(document.getElementById('testimage'));
+		
+		//Polygonmode
+		anno.addPlugin('PolygonSelector', { activate: false });
+		
+		anno.addHandler('onAnnotationCreated', function(annotation){
+			//console.log(annotation.text);
+			getData(annotation);
+		});
+	}
+</script>
+
+<!-- Function in Handler -->
+<script>
+	function getData(annotation){
+		text = annotation.text;
+		sourceImage = annotation.src;
+		geometry = annotation.shapes[0].geometry;
+		
+		changeJson(text, sourceImage, geometry);
+
+	}
+
+	function changeJson(text, sourceImage, geometry){
+		var annotationInfo = new Object();
+		annotationInfo.tag = text;
+		annotationInfo.anno = geometry;
+		annotationInfo.imageLocation = sourceImage;
+		
+		var toJson = JSON.stringify(annotationInfo);
+		console.log(toJson);
+		
+		//if(sourceImage != 
+		var addJson  = addJsonData(toJson, text);
+		
+	}
+</script>
+
+<!-- file create -->
+<script>
+	function addJsonData(toJson, tag){
+		var req = new XMLHttpRequest();
+		var url = "http://ec2-13-125-180-211.ap-northeast-2.compute.amazonaws.com/php/formToJson.php";
+	
+	// why don't use XMLHttpRequests????
+	//
+	//	req.open("POST", url, true);
+	//	req.onreadystatechange = function(){
+	//		if(this.status == 200){
+	//			console.log("test");
+	//		}
+	//	
+	//	};
+	//	sort = "data=".concat(toJson);
+	//	console.log(sort);
+	//	req.send("data=stringdata");
+		
+		$.ajax({
+			data: 'data=' + toJson + "&tag=" + tag,
+			url: url,
+			method: 'POST',
+			success: function(msg){
+					console.log(msg);
+				}
+		
+		});
+
+
+	}
+</script>
+</html>
+
