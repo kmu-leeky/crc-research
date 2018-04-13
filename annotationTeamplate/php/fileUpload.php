@@ -1,8 +1,10 @@
 <?php
 $target_dir = "/var/www/html/Images/example_folder/";
 $target_file = $target_dir . basename($_FILES["uploadFile"]["name"]);
-echo $target_file;
+//echo $target_file;
+
 $uploadOk = 1;
+
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
 //echo $target_file;
