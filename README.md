@@ -46,7 +46,8 @@ api references Doc. 에 자세하게 나열되어있습니다.<br>
 https://annotorious.github.io/api.html
 
 <br>
-	//Annotation
+<pre>
+        //Annotation
         anno.makeAnnotatable(document.getElementById('testimage'));
         transFormSelOpt();
 
@@ -61,7 +62,7 @@ https://annotorious.github.io/api.html
                 deleteData(annotation);
                 getData(annotation);
         });
-
+</pre>
 <br>
 
 
